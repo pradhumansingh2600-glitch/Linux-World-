@@ -1,0 +1,33 @@
+import streamlit as st
+
+st.title("CALCULATOR")
+if "calc" not in st.session_state:        # use 'calc' consistently
+    st.session_state.calc = ""
+    
+st.text_input("screen", value=st.session_state.calc, key="screen")  # fixed typo 'seassion_state' → 'session_state'
+
+buttons =[ ["1" , "2" , "3" , "+"],
+          ["4" , "5" , "6" , "-"],
+          ["7" , "8" , "9" , "*"],
+          ["0" , "C" , "<" , "/"],
+          ["." , "=" ,]]
+
+# col1, col2, col3, col4 = st.columns(4)  # unused, can remove
+
+for row in buttons:  # fixed 'button' → 'buttons'
+    cols = st.columns(len(row))
+    for col,btn in zip(cols,row):
+        if col.button(btn):
+            if btn == "C":
+                st.session_state.calc = ""
+            elif btn == "<":
+                st.session_state.calc = st.session_state.calc[:-1]
+            elif btn == "=":
+                 try:
+                    st.session_state.calc = str(eval(st.session_state.calc))
+                 except:
+                    st.session_state.calc = "Error"
+            else:
+                st.session_state.calc += btn  # fixed 'cal' → 'calc'
+
+st.text_input("Result", value=st.session_state.calc, key="result")
